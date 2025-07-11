@@ -1,0 +1,10 @@
+{
+  "mcpServers": {
+    "my-first-mcp": {
+      "command": "node",
+      "args": ["index.js"],
+      "cwd": "/Users/sethdavis/Desktop/my-first-mcp",
+      "env": {}
+    }
+  }
+}
