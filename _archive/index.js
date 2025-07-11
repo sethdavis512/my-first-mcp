@@ -9,6 +9,7 @@ import {
 import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'fs';
 import { join, dirname } from 'path';
 import { glob } from 'glob';
+import { execSync } from 'child_process';
 
 // Create a new MCP server
 const server = new Server(
@@ -212,6 +213,42 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
                         }
                     },
                     required: ['filePath']
+                }
+            },
+            {
+                name: 'diff_pattern_generator',
+                description:
+                    'Extract patterns from git diff and generate similar code features based on the change template',
+                inputSchema: {
+                    type: 'object',
+                    properties: {
+                        commitHash: {
+                            type: 'string',
+                            description:
+                                'Specific commit hash to analyze (defaults to HEAD)'
+                        },
+                        projectRoot: {
+                            type: 'string',
+                            description:
+                                'Git repository root (defaults to current directory)'
+                        },
+                        newFeatureName: {
+                            type: 'string',
+                            description:
+                                'Name for the new feature to generate based on the diff pattern'
+                        },
+                        generationType: {
+                            type: 'string',
+                            description:
+                                'Type of generation: "similar_feature", "test_pattern", "api_endpoint", or "custom" (defaults to "similar_feature")'
+                        },
+                        customInstructions: {
+                            type: 'string',
+                            description:
+                                'Additional instructions for pattern adaptation when generationType is "custom"'
+                        }
+                    },
+                    required: ['newFeatureName']
                 }
             }
         ]
@@ -835,6 +872,100 @@ Please provide a detailed complexity analysis with actionable refactoring recomm
                         {
                             type: 'text',
                             text: `❌ COMPLEXITY ANALYSIS ERROR: ${error.message}`
+                        }
+                    ]
+                };
+            }
+
+        case 'diff_pattern_generator':
+            try {
+                const {
+                    commitHash = 'HEAD',
+                    projectRoot = process.cwd(),
+                    newFeatureName,
+                    generationType = 'similar_feature',
+                    customInstructions = ''
+                } = args;
+
+                // Get git diff
+                const gitCommand = `git show ${commitHash} --no-merges`;
+                const diffOutput = execSync(gitCommand, {
+                    cwd: projectRoot,
+                    encoding: 'utf-8'
+                });
+
+                // Parse commit info
+                const commitLines = diffOutput.split('\n');
+                const commitMessage =
+                    commitLines
+                        .find(
+                            (line) =>
+                                line.trim() &&
+                                !line.startsWith('commit') &&
+                                !line.startsWith('Author') &&
+                                !line.startsWith('Date') &&
+                                !line.startsWith('diff')
+                        )
+                        ?.trim() || 'No commit message';
+
+                // Create pattern analysis prompt based on generation type
+                const generationPrompts = {
+                    similar_feature: `Analyze this git diff and create a similar feature called "${newFeatureName}". Follow the exact same patterns, file structure, and implementation approach but adapt it for the new feature.`,
+
+                    test_pattern: `Analyze this git diff and generate comprehensive tests for a feature called "${newFeatureName}" following the same testing patterns, file organization, and test coverage approach shown in the diff.`,
+
+                    api_endpoint: `Analyze this git diff and create a new API endpoint called "${newFeatureName}" following the same routing patterns, error handling, validation, and response structure shown in the diff.`,
+
+                    custom: `Analyze this git diff and generate code for "${newFeatureName}" with these specific instructions: ${customInstructions}`
+                };
+
+                const generationPrompt =
+                    generationPrompts[generationType] ||
+                    generationPrompts['similar_feature'];
+
+                const analysisPrompt = `
+You are a code pattern extraction and generation expert. Analyze this git diff and use it as a template to generate new code.
+
+**Original Commit**: ${commitMessage}
+**New Feature Name**: ${newFeatureName}
+**Generation Type**: ${generationType}
+
+**Instructions**: ${generationPrompt}
+
+Please:
+1. **Extract Patterns**: Identify the key patterns, structures, and conventions from the diff
+2. **Adapt Names**: Replace original names/identifiers with "${newFeatureName}" variants  
+3. **Maintain Structure**: Keep the same file organization, function signatures, and architectural patterns
+4. **Generate Code**: Provide complete, ready-to-use code files following the extracted patterns
+5. **Implementation Guide**: Explain what files to create/modify and in what order
+
+**Git Diff to Analyze**:
+
+\`\`\`diff
+${diffOutput}
+\`\`\`
+
+Please provide:
+- **Pattern Analysis**: What patterns were extracted from the diff
+- **File Structure**: What files need to be created/modified
+- **Generated Code**: Complete code for each file, properly adapted for "${newFeatureName}"
+- **Implementation Steps**: Step-by-step guide to implement the new feature
+`;
+
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: analysisPrompt
+                        }
+                    ]
+                };
+            } catch (error) {
+                return {
+                    content: [
+                        {
+                            type: 'text',
+                            text: `❌ DIFF PATTERN GENERATOR ERROR: ${error.message}`
                         }
                     ]
                 };
