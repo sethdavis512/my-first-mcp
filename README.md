@@ -4,24 +4,27 @@ This is a powerful Model Context Protocol (MCP) server that provides AI-driven d
 
 ## Features
 
-- **🔍 CODIFY**: AI-powered code pattern extraction and documentation
-- **🔥 Code Roaster**: Humorous but constructive code review comments
-- **📝 TODO Finder**: Comprehensive technical debt analysis and prioritization
-- **📋 PRD Generator**: Professional Project Requirements Document creation
-- **💾 Document Persistence**: Automated saving to proper locations (.github/, /docs/)
+-   **🔍 CODIFY**: AI-powered code pattern extraction and documentation
+-   **🔥 Code Roaster**: Humorous but constructive code review comments
+-   **📝 TODO Finder**: Comprehensive technical debt analysis and prioritization
+-   **📋 PRD Generator**: Professional Project Requirements Document creation
+-   **� Bug Predictor**: Identify code patterns that commonly lead to bugs
+-   **🧮 Complexity Analyzer**: Measure cyclomatic complexity and suggest refactoring
+-   **�💾 Document Persistence**: Automated saving to proper locations (.github/, /docs/)
 
 ## Setup
 
 1. Install dependencies:
 
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
 2. Run the server:
-   ```bash
-   npm start
-   ```
+
+    ```bash
+    npm start
+    ```
 
 ## What is MCP?
 
@@ -29,16 +32,18 @@ The Model Context Protocol (MCP) is an open protocol that enables AI assistants 
 
 ## How it works
 
-- The server listens on stdio (standard input/output)
-- It provides 6 powerful tools for development workflow automation:
-  - **codify**: AI-driven code pattern extraction
-  - **write_codified_patterns**: Saves patterns to GitHub Copilot instructions
-  - **code_roaster**: Humorous code review with multiple styles
-  - **find_todos**: Technical debt scanning and prioritization
-  - **generate_prd**: Professional requirements document creation
-  - **save_prd**: Document persistence to /docs folder
-- Each tool uses AI analysis rather than hardcoded rules for intelligent insights
-- The server follows the MCP specification for tool discovery and execution
+-   The server listens on stdio (standard input/output)
+-   It provides 8 powerful tools for development workflow automation:
+    -   **codify**: AI-driven code pattern extraction
+    -   **write_codified_patterns**: Saves patterns to GitHub Copilot instructions
+    -   **code_roaster**: Humorous code review with multiple styles
+    -   **find_todos**: Technical debt scanning and prioritization
+    -   **generate_prd**: Professional requirements document creation
+    -   **save_prd**: Document persistence to /docs folder
+    -   **bug_predictor**: Identify bug-prone code patterns
+    -   **complexity_analyzer**: Measure complexity and suggest refactoring
+-   Each tool uses AI analysis rather than hardcoded rules for intelligent insights
+-   The server follows the MCP specification for tool discovery and execution
 
 ## Connecting to VS Code
 
@@ -57,10 +62,10 @@ The Model Context Protocol (MCP) is an open protocol that enables AI assistants 
 2. Open Command Palette (`Cmd+Shift+P`)
 3. Run "MCP: Add Server"
 4. Use these settings:
-   - **Name**: my-first-mcp
-   - **Command**: node
-   - **Args**: ["index.js"]
-   - **Working Directory**: /Users/sethdavis/Desktop/my-first-mcp
+    - **Name**: my-first-mcp
+    - **Command**: node
+    - **Args**: ["index.js"]
+    - **Working Directory**: /Users/sethdavis/Desktop/my-first-mcp
 
 ### Method 3: Manual Configuration
 
@@ -78,8 +83,8 @@ Analyzes code files and extracts patterns/practices to `.github/copilot-instruct
 
 **Usage:**
 
-- `"CODIFY this file"`
-- `"Analyze index.js and extract coding patterns"`
+-   `"CODIFY this file"`
+-   `"Analyze index.js and extract coding patterns"`
 
 #### 🔥 Code Roaster Tool
 
@@ -87,9 +92,9 @@ Provides humorous but constructive code review comments
 
 **Usage:**
 
-- `"Roast my index.js file"`
-- `"Give me spicy code review comments for this file"`
-- `"Savage roast of my terrible code"`
+-   `"Roast my index.js file"`
+-   `"Give me spicy code review comments for this file"`
+-   `"Savage roast of my terrible code"`
 
 **Styles:** `gentle`, `spicy`, `savage`
 
@@ -99,9 +104,9 @@ Scans codebase for TODO, FIXME, HACK comments and creates action plans
 
 **Usage:**
 
-- `"Find all TODOs in my project"`
-- `"Scan for technical debt and prioritize it"`
-- `"What FIXME comments need attention?"`
+-   `"Find all TODOs in my project"`
+-   `"Scan for technical debt and prioritize it"`
+-   `"What FIXME comments need attention?"`
 
 #### 📋 PRD Generator Tool
 
@@ -109,15 +114,46 @@ Creates comprehensive Project Requirements Documents
 
 **Usage:**
 
-- `"Generate a PRD for my TaskMaster app which helps teams manage projects"`
-- `"Create project requirements for an e-commerce platform"`
+-   `"Generate a PRD for my TaskMaster app which helps teams manage projects"`
+-   `"Create project requirements for an e-commerce platform"`
+
+#### 🐛 Bug Predictor Tool
+
+Identifies code patterns that commonly lead to bugs
+
+**Usage:**
+
+-   `"Predict bugs in my index.js file"`
+-   `"Analyze this file for bug-prone patterns with thorough analysis"`
+-   `"Quick scan for obvious bug patterns"`
+
+**Analysis Depths:**
+
+-   `quick`: Fast scan for obvious issues
+-   `thorough`: Comprehensive bug pattern analysis (default)
+-   `comprehensive`: Deep-dive analysis with risk assessment
+
+#### 🧮 Complexity Analyzer Tool
+
+Measures cyclomatic complexity and suggests refactoring opportunities
+
+**Usage:**
+
+-   `"Analyze complexity of my index.js file"`
+-   `"Check complexity with threshold 8 and include refactoring tips"`
+-   `"Measure complexity and suggest simplification strategies"`
+
+**Options:**
+
+-   `complexityThreshold`: Flag functions above this complexity (default: 10)
+-   `includeRefactoringTips`: Include detailed refactoring suggestions (default: true)
 
 #### 💾 Document Persistence Tools
 
 Automatically save analysis results to appropriate locations:
 
-- `write_codified_patterns` → `.github/copilot-instructions.md`
-- `save_prd` → `/docs/prd-[project]-[date].md`
+-   `write_codified_patterns` → `.github/copilot-instructions.md`
+-   `save_prd` → `/docs/prd-[project]-[date].md`
 
 ### Example Test Commands
 
@@ -125,12 +161,14 @@ Automatically save analysis results to appropriate locations:
 2. **Code Review**: `"Roast this file with a spicy style"`
 3. **Technical Debt**: `"Find all TODOs and create an action plan"`
 4. **Documentation**: `"Generate a PRD for my MCP server project"`
+5. **Bug Prediction**: `"Predict bugs in my code with thorough analysis"`
+6. **Complexity Analysis**: `"Analyze complexity and suggest refactoring"`
 
 ## Output Files & Structure
 
 Your MCP server automatically creates and manages these files:
 
-```
+```text
 project-root/
 ├── .github/
 │   └── copilot-instructions.md    # AI-extracted coding patterns
@@ -142,9 +180,9 @@ project-root/
 
 ### File Purposes
 
-- **`.github/copilot-instructions.md`**: Contains coding patterns extracted by the CODIFY tool. GitHub Copilot reads this file to provide context-aware code suggestions that match your project's conventions.
+-   **`.github/copilot-instructions.md`**: Contains coding patterns extracted by the CODIFY tool. GitHub Copilot reads this file to provide context-aware code suggestions that match your project's conventions.
 
-- **`/docs/prd-*.md`**: Professional Project Requirements Documents generated by the PRD tool, timestamped and ready for stakeholder review.
+-   **`/docs/prd-*.md`**: Professional Project Requirements Documents generated by the PRD tool, timestamped and ready for stakeholder review.
 
 ## Advanced Usage
 
@@ -161,6 +199,6 @@ You can chain multiple tools together:
 
 Most tools accept custom prompts for specialized analysis:
 
-- `"CODIFY this file but focus on security patterns"`
-- `"Find TODOs but only show high-priority items"`
-- `"Generate a PRD with emphasis on scalability requirements"`
+-   `"CODIFY this file but focus on security patterns"`
+-   `"Find TODOs but only show high-priority items"`
+-   `"Generate a PRD with emphasis on scalability requirements"`
